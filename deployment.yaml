@@ -1,0 +1,103 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: datadog-large-traces
+  annotations:
+    admission.datadoghq.com/java-lib.version: v1.49.0
+  labels:
+    app: datadog-large-traces
+    tags.datadoghq.com/version: master
+    tags.datadoghq.com/team: c3vu3
+    tags.datadoghq.com/env: cd
+    tags.datadoghq.com/application: test
+    admission.datadoghq.com/enabled: 'true'
+    tags.datadoghq.com/service: c3vu3-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datadog-large-traces
+  template:
+    metadata:
+      labels:
+        app: datadog-large-traces
+        tags.datadoghq.com/version: master
+        tags.datadoghq.com/team: c3vu3
+        tags.datadoghq.com/env: cd
+        tags.datadoghq.com/application: test
+        admission.datadoghq.com/enabled: 'true'
+        tags.datadoghq.com/service: c3vu3-test
+      annotations:
+        admission.datadoghq.com/java-lib.version: v1.49.0
+    spec:
+      containers:
+        - resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /datadog-large-traces/status/health
+              port: 4444
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - sleep 30
+          name: datadog-large-traces
+          livenessProbe:
+            httpGet:
+              path: /datadog-large-traces/status/info
+              port: 4444
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 12
+          env:
+            - name: DD_TAGS
+              value: 'team:c3vu3,application:test'
+            - name: DD_ENV
+              value: cd
+            - name: DD_SERVICE
+              value: c3vu3-test
+            - name: DD_VERSION
+              value: master
+            - name: DD_TRACE_DB_CLIENT_SPLIT_BY_INSTANCE
+              value: 'true'
+            - name: DD_TRACE_128_BIT_TRACEID_LOGGING_ENABLED
+              value: 'true'
+            - name: DD_TRACE_OTEL_ENABLED
+              value: 'true'
+            - name: DD_DBM_PROPAGATION_MODE
+              value: service
+            - name: DD_PROFILING_ENABLED
+              value: 'true'
+            - name: DD_INJECT_FORCE
+              value: 'true'
+            - name: MALLOC_ARENA_MAX
+              value: '2'
+          ports:
+            - name: http
+              containerPort: 4444
+              protocol: TCP
+          imagePullPolicy: Always
+          image: 'datadog-large-trace:latest'
+
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 2
+  progressDeadlineSeconds: 600

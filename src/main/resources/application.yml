@@ -1,0 +1,12 @@
+server:
+  port: 4444
+  servlet:
+    context-path: /datadog-large-traces
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, threaddump
+      base-path: /status
