@@ -58,6 +58,5 @@ public class TestConfiguration
         testService.receiveMessage(msg);
         testService.doSomethingChildSpan();
         testService.doSomethingNewSpanAnnotation();
-        testService.doSomethingNewSpanCode();
     }
 }
