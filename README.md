@@ -21,8 +21,8 @@ If you already can use the datadog agent from your local IDe just run the spring
 
 8) Build and deploy docker image in openshift
 9) Build docker image from root directory of the repository using `docker build -t your.registry/datadog-large-trace .` Obviously change "your.registry" as required
-10) Push the image using `docker push `your.registry/datadog-large-trace` Once again adjust registry as needed
-11) Finally edit the deployment.yaml file in line 98 to point to correct image registry and import it in openshift. Adjust datadog tracer versions and so on as needed. The yaml assumed datadog in openshift is applied by annotation instrumentation.
+10) Push the image using `docker push your.registry/datadog-large-trace` Once again adjust registry as needed
+11) Finally edit the deployment.yaml file in line 98 to point to correct image registry and import it in openshift. Adjust datadog tracer versions and so on as needed. The yaml assumed datadog in openshift is applied by annotation instrumentation. Check if any further edits in the file are needed for your cluster.
 
 12) Finally send messages directly from the azure servicebus gui to your application on the previously created topic
 ![image](https://github.com/user-attachments/assets/06089684-1d9d-477c-bec3-8766e8ea01f8)
