@@ -35,7 +35,7 @@ public class TestService
     {
         RestTemplate template = new RestTemplate();
         String response =
-            template.getForObject("http://localhost:4444/datadog-large-traces/actuator/health", String.class);
+            template.getForObject("http://localhost:4444/datadog-large-traces/status/health", String.class);
         LOG.info("Response from rest call: {}", response);
     }
 }
