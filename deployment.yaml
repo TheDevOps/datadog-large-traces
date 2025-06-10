@@ -95,7 +95,7 @@ spec:
               containerPort: 4444
               protocol: TCP
           imagePullPolicy: Always
-          image: 'datadog-large-trace:latest'
+          image: 'docker.porscheinformatik.com/docker-personal/personal/datadog-large-trace:latest'
 
   strategy:
     type: Recreate
